@@ -47,11 +47,11 @@ exports.handler = async function(event, context) {
                     for (let a = 0; a < rand(0,44); a++) {
                         const vid = vids.eq(a);
                         const linkElements = vid.find('a');
-                        const link = links.eq(0).attr('href');
+                        const link = linkElements.eq(0).attr('href');
                         links.push(link);
                     }
                     return {
-                        statusCode: 400,
+                        statusCode: 200,
                         body: JSON.stringify({links:links}),
                     };
                 break;
