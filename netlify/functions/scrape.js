@@ -16,7 +16,7 @@ exports.handler = async function(event, context) {
         // Return the extracted data
         return {
             statusCode: 200,
-            body: JSON.stringify({ title }),
+            body: JSON.stringify({ title ,"qie":"que"}),
         };
     } catch (error) {
         // Handle any errors
