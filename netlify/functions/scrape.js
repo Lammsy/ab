@@ -43,6 +43,11 @@ exports.handler = async function(event, context) {
                     //max vids 44
                     const doc = getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
                     const vids = doc('.pcVideoListItem.js-pop.videoblock.videoBox.omega');
+                    return {
+                        statusCode: 200, // Change status code to 200 for success
+                        body: JSON.stringify({ links: vids.attr('data-id') }), // Return the list of links
+                    };
+                    /*
                     const links = [];
                     const numItems = 20; // Generate a random number of items to process 44
                     
@@ -59,7 +64,7 @@ exports.handler = async function(event, context) {
                     return {
                         statusCode: 200, // Change status code to 200 for success
                         body: JSON.stringify({ links: links }), // Return the list of links
-                    };
+                    };*/
                 break;
             default:break;
         }
