@@ -33,9 +33,9 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 exports.handler = async function(event, context) {
-    const { url } = event.queryStringParameters;
+    const { i } = event.queryStringParameters;
     const { t } = event.queryStringParameters;
-    if (!url) {
+    if (!i) {
         //Get random popular page videos
         switch(t){
             case 0:
@@ -44,9 +44,9 @@ exports.handler = async function(event, context) {
                     const doc = getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
                     const vids = doc('.pcVideoListItem.js-pop.videoblock.videoBox.omega');
                     const links = [];
-                    const numItems = rand(0, 44); // Generate a random number of items to process
+                    const numItems = 20; // Generate a random number of items to process 44
                     
-                    for (let a = 0; a < numItems; a++) {
+                    for (let a = 1; a < numItems; a++) {
                         const vid = vids.eq(a); // Get the video item at index 'a'
                         const linkElements = vid.find('a'); // Find all <a> elements within the video item
                     
@@ -56,7 +56,6 @@ exports.handler = async function(event, context) {
                             links.push(link); // Add the link to the links array
                         }
                     }
-                    
                     return {
                         statusCode: 200, // Change status code to 200 for success
                         body: JSON.stringify({ links: links }), // Return the list of links
