@@ -38,8 +38,6 @@ exports.handler = async function(event, context) {
 
     if (!i) {
         //Get random popular page videos
-        switch(t){
-            case 0:
                     //Get N videos in random site MAX PAGE 455 https://es.pornhub.com/video?o=mv&page=455
                     //max vids 44
                     const $ = getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
@@ -82,9 +80,13 @@ exports.handler = async function(event, context) {
                         statusCode: 200, // Change status code to 200 for success
                         body: JSON.stringify({ links: links }), // Return the list of links
                     };*/
+
+        /*
+        switch(t){
+            case 0:
                 break;
             default:break;
-        }
+        }*/
 
         /*
         return {
