@@ -43,16 +43,23 @@ exports.handler = async function(event, context) {
                     //max vids 44
                     const doc = getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
                     const vids = doc('.pcVideoListItem.js-pop.videoblock.videoBox.omega');
-                    const links =[];
-                    for (let a = 0; a < rand(0,44); a++) {
-                        const vid = vids.eq(a);
-                        const linkElements = vid.find('a');
-                        const link = linkElements.eq(0).attr('href');
-                        links.push(link);
+                    const links = [];
+                    const numItems = rand(0, 44); // Generate a random number of items to process
+                    
+                    for (let a = 0; a < numItems; a++) {
+                        const vid = vids.eq(a); // Get the video item at index 'a'
+                        const linkElements = vid.find('a'); // Find all <a> elements within the video item
+                    
+                        // Check if there are any <a> elements
+                        if (linkElements.length > 0) {
+                            const link = linkElements.attr('href'); // Get the href attribute of the first <a> element
+                            links.push(link); // Add the link to the links array
+                        }
                     }
+                    
                     return {
-                        statusCode: 200,
-                        body: JSON.stringify({links:links}),
+                        statusCode: 200, // Change status code to 200 for success
+                        body: JSON.stringify({ links: links }), // Return the list of links
                     };
                 break;
             default:break;
