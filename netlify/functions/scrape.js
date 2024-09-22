@@ -35,6 +35,12 @@ const cheerio = require('cheerio');
 exports.handler = async function(event, context) {
     const { i } = event.queryStringParameters;
     const { t } = event.queryStringParameters;
+    const doc = getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
+    const vids = doc('.pcVideoListItem.js-pop.videoblock.videoBox.omega');
+    return {
+        statusCode: 200, // Change status code to 200 for success
+        body: JSON.stringify({ links: vids.attr('data-id') }), // Return the list of links
+    };
     if (!i) {
         //Get random popular page videos
         switch(t){
