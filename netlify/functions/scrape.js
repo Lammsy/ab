@@ -35,30 +35,35 @@ const cheerio = require('cheerio');
 exports.handler = async function(event, context) {
     const { i } = event.queryStringParameters;
     const { t } = event.queryStringParameters;
-    const doc = await getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
-    const vids = doc('.pcVideoListItem.js-pop.videoblock.videoBox.omega');
 
-        // Collect the data you want to return
-        const links = vids.map((index, element) => {
-            return doc(element).attr('data-id'); // Use doc(element) to access Cheerio methods
-        }).get(); // Get an array from the Cheerio object
-    
-        return {
-            statusCode: 200, // Change status code to 200 for success
-            body: JSON.stringify({ links }), // Return the list of links
-        };
     if (!i) {
         //Get random popular page videos
         switch(t){
             case 0:
                     //Get N videos in random site MAX PAGE 455 https://es.pornhub.com/video?o=mv&page=455
                     //max vids 44
-                    const doc = getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
-                    const vids = doc('.pcVideoListItem.js-pop.videoblock.videoBox.omega');
-                    return {
-                        statusCode: 200, // Change status code to 200 for success
-                        body: JSON.stringify({ links: vids.attr('data-id') }), // Return the list of links
-                    };
+                    const $ = getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
+                    const videoElements = $('.pcVideoListItem.js-pop.videoblock.videoBox');
+                    if (videoElements.length > 0) {
+                        // Get the first element in the list
+                        const firstVideoElement = videoElements.first();
+            
+                        // Find the first <a> element inside the first video element
+                        const firstAnchor = firstVideoElement.find('a').first();
+            
+                        // Extract the href attribute or any other information you need
+                        const href = firstAnchor.attr('href');
+                        const linkText = firstAnchor.text();
+                        return {
+                            statusCode: 200, // Change status code to 200 for success
+                            body: JSON.stringify({ links: href }), // Return the list of links
+                        };
+                    } else {
+                        return {
+                            statusCode: 300, // Change status code to 200 for success
+                            body: JSON.stringify({ error:"no videos found" }), // Return the list of links
+                        };
+                    }
                     /*
                     const links = [];
                     const numItems = 20; // Generate a random number of items to process 44
@@ -91,10 +96,19 @@ exports.handler = async function(event, context) {
         try {
             switch(t){
                 case 0:
-                    //Get N videos in random site MAX PAGE 455 https://es.pornhub.com/video?o=mv&page=455
-                    //max vids 44
-                    const doc = getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
+                    const doc = await getDoc("https://es.pornhub.com/view_video.php?"+i);
                     const vids = doc('.pcVideoListItem.js-pop.videoblock.videoBox.omega');
+
+                    // Collect the data you want to return
+                    const links = vids.map((index, element) => {
+                        return doc(element).attr('data-id'); // Use doc(element) to access Cheerio methods
+                    }).get(); // Get an array from the Cheerio object
+                
+                    return {
+                        statusCode: 200, // Change status code to 200 for success
+                        body: JSON.stringify({ links }), // Return the list of links
+                    };
+                    break;
                 default:break;
             }
             //const title = $('title').text();
