@@ -40,8 +40,8 @@ exports.handler = async function(event, context) {
         //Get random popular page videos
                     //Get N videos in random site MAX PAGE 455 https://es.pornhub.com/video?o=mv&page=455
                     //max vids 44
-                    const $ = getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
-                    const videoElements = $('.pcVideoListItem.js-pop.videoblock.videoBox');
+                    const d = getDoc("https://pornhub.com/video?o=mv&page="+rand(0,455));
+                    const videoElements = d('.pcVideoListItem.js-pop.videoblock.videoBox');
                     if (videoElements.length > 0) {
                         // Get the first element in the list
                         const firstVideoElement = videoElements.first();
