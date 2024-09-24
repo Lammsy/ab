@@ -44,18 +44,14 @@ exports.handler = async function(event, context) {
             const d = await getDoc("https://pornhub.com/video?o=mv&page=" + rand(0, 455));
             const videoElements = d('.pcVideoListItem.js-pop.videoblock.videoBox');
             const links1 = [];
-            if (videoElements.length > 0) {
-                const firstVideoElement = videoElements.first();
-                const firstAnchor = firstVideoElement.find('a').first();
-                const href = firstAnchor.attr('href');
-                links1.push(href);
-            }
-            else {
-                return {
-                    statusCode: 300,
-                    body: JSON.stringify({ error: "No videos found" }),
-                };
-            }
+            videoElements.each((index, element) => {
+                const anchor = d(element).find('a').first(); // Get the first <a> element
+                const href = anchor.attr('href'); // Extract the href attribute
+
+                if (href) {
+                    links1.push(href); // Add the href to the links1 array
+                }
+            });
             return {
                 statusCode: 200, // Success
                 body: JSON.stringify({ links: links1 }), // Return the first video link
