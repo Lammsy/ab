@@ -27,7 +27,7 @@ exports.handler = async function(event, context) {
             body: JSON.stringify({ error: 'Failed to scrape data' }),
         };
     }
-};*/
+};*//*
 const express = require('express');
 const cors = require('cors');
 const app = express(); // Initialize Express app
@@ -117,3 +117,38 @@ async function getDoc(urls) {
         throw error; // Rethrow the error so it can be handled by the calling code
     }
 }
+*/
+
+exports.handler = async function(event, context) {
+    if (event.httpMethod === "OPTIONS") {
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", 
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+            },
+            body: ""
+        };
+    }
+
+    try {
+        const { data } = await axios.get('https://example.com');
+        const $ = cheerio.load(data);
+
+        const title = $('title').text(); // Extract title as an example
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Allows any domain
+            },
+            body: JSON.stringify({ title }),
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: 'Failed to scrape data' }),
+        };
+    }
+};
