@@ -29,6 +29,17 @@ exports.handler = async function(event, context) {
     }
 };*/
 
+exports.handler = async function(event, context) {
+    return {
+        statusCode: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',  // Allow requests from any origin
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        body: JSON.stringify({ message: 'CORS is now enabled!' })
+    };
+}
 
 const axios = require('axios');
 const cheerio = require('cheerio');
