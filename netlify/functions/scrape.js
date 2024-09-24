@@ -35,18 +35,6 @@ const app = express(); // Initialize Express app
 // Enable CORS
 app.use(cors());
 
-// Example route
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
-
-// Start the server
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
-const cors = require('cors');
-app.use(cors());  // Allow all cross-origin requests
-
 const axios = require('axios');
 const cheerio = require('cheerio');
 
