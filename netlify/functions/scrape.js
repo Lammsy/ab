@@ -160,7 +160,7 @@ exports.handler = async function(event, context) {
             headers: {
                 "Access-Control-Allow-Origin": "*", // Allows any domain
             },
-            body: JSON.stringify({ links }),
+            body: JSON.stringify({ links1 }),
         };
     } catch (error) {
         return {
