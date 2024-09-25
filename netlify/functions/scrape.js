@@ -146,8 +146,11 @@ exports.handler = async function(event, context) {
         const $ = cheerio.load(data);
         const ti = $('title').text();
         return {
-            statusCode: 200, // Success
-            body: JSON.stringify({ links: ti }), // Return the first video link
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Allows any domain
+            },
+            body: JSON.stringify({ ti }),
         };
         /*
         const videoElements = $('.pcVideoListItem.js-pop.videoblock.videoBox');
