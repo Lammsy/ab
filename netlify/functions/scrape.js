@@ -144,15 +144,6 @@ exports.handler = async function(event, context) {
         });
 
         const $ = cheerio.load(data);
-        const ti = $('title').text();
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Allows any domain
-            },
-            body: JSON.stringify({ ti }),
-        };
-        /*
         const videoElements = $('.pcVideoListItem.js-pop.videoblock.videoBox');
         const links1 = [];
         videoElements.each((index, element) => {
@@ -165,9 +156,12 @@ exports.handler = async function(event, context) {
         });
         
         return {
-            statusCode: 200, // Success
-            body: JSON.stringify({ links: links1 }), // Return the first video link
-        };*/
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Allows any domain
+            },
+            body: JSON.stringify({ links }),
+        };
     } catch (error) {
         return {
             statusCode: 500,
