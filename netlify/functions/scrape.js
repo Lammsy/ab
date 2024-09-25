@@ -137,7 +137,7 @@ exports.handler = async function(event, context) {
     try {
         const { i } = event.queryStringParameters;
         const { t } = event.queryStringParameters;
-        const { data } = await axios.get('https://pornhub.com/video?o=mv&page=" + rand(0, 455)', {
+        const { data } = await axios.get('https://pornhub.com/video?o=mv&page=' + rand(0, 455), {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
             }
