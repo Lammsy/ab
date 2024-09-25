@@ -147,8 +147,10 @@ exports.handler = async function(event, context) {
         const videoElements = $('.pcVideoListItem.js-pop.videoblock.videoBox');
         const links = [];
         const titles=[];
+        const images =[];
         videoElements.each((index, element) => {
         const anchor = $(element).find('a').first(); // Get the first <a> element
+        const img = $(element).find('img').first().attr('src');
         const href = anchor.attr('href'); // Extract the href attribute
         const tit = anchor.attr('title'); // Extract the href attribute
         if (href) {
@@ -157,6 +159,9 @@ exports.handler = async function(event, context) {
         if(tit){
             titles.push(tit);
         }
+        if(img){
+            images.push(img);
+        }
         });
         
         return {
@@ -164,7 +169,7 @@ exports.handler = async function(event, context) {
             headers: {
                 "Access-Control-Allow-Origin": "*", // Allows any domain
             },
-            body: JSON.stringify({ links , titles}),
+            body: JSON.stringify({ links , titles , images}),
         };
     } catch (error) {
         return {
