@@ -145,13 +145,17 @@ exports.handler = async function(event, context) {
 
         const $ = cheerio.load(data);
         const videoElements = $('.pcVideoListItem.js-pop.videoblock.videoBox');
-        const links1 = [];
+        const links = [];
+        const titles=[];
         videoElements.each((index, element) => {
-        const anchor = $(element).find('a').first(); // Get the first <a> element
+        const anchor = $(element).find('a')[0]; // Get the first <a> element
         const href = anchor.attr('href'); // Extract the href attribute
-
+        const tit = anchor.attr('title'); // Extract the href attribute
         if (href) {
-            links1.push(href); // Add the href to the links1 array
+            links.push(href); // Add the href to the links1 array
+        }
+        if(tit){
+            titles.push(tit);
         }
         });
         
@@ -160,7 +164,7 @@ exports.handler = async function(event, context) {
             headers: {
                 "Access-Control-Allow-Origin": "*", // Allows any domain
             },
-            body: JSON.stringify({ links1 }),
+            body: JSON.stringify({ links , titles}),
         };
     } catch (error) {
         return {
