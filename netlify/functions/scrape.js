@@ -144,20 +144,27 @@ exports.handler = async function(event, context) {
         });
 
         const $ = cheerio.load(data);
+        const ti = $('title').text();
+        return {
+            statusCode: 200, // Success
+            body: JSON.stringify({ links: ti }), // Return the first video link
+        };
+        /*
         const videoElements = $('.pcVideoListItem.js-pop.videoblock.videoBox');
-            const links1 = [];
-            videoElements.each((index, element) => {
-                const anchor = $(element).find('a').first(); // Get the first <a> element
-                const href = anchor.attr('href'); // Extract the href attribute
+        const links1 = [];
+        videoElements.each((index, element) => {
+        const anchor = $(element).find('a').first(); // Get the first <a> element
+        const href = anchor.attr('href'); // Extract the href attribute
 
-                if (href) {
-                    links1.push(href); // Add the href to the links1 array
-                }
-            });
-            return {
-                statusCode: 200, // Success
-                body: JSON.stringify({ links: links1 }), // Return the first video link
-            };
+        if (href) {
+            links1.push(href); // Add the href to the links1 array
+        }
+        });
+        
+        return {
+            statusCode: 200, // Success
+            body: JSON.stringify({ links: links1 }), // Return the first video link
+        };*/
     } catch (error) {
         return {
             statusCode: 500,
