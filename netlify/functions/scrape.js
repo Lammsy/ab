@@ -118,6 +118,8 @@ async function getDoc(urls) {
     }
 }
 */
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 exports.handler = async function(event, context) {
     if (event.httpMethod === "OPTIONS") {
@@ -133,9 +135,13 @@ exports.handler = async function(event, context) {
     }
 
     try {
-        const { data } = await axios.get('https://example.com');
-        const $ = cheerio.load(data);
+        const { data } = await axios.get('https://example.com', {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+            }
+        });
 
+        const $ = cheerio.load(data);
         const title = $('title').text(); // Extract title as an example
 
         return {
@@ -148,7 +154,8 @@ exports.handler = async function(event, context) {
     } catch (error) {
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Failed to scrape data' }),
+            body: JSON.stringify({ error: `Failed to scrape data: ${error.message}` }),
         };
     }
 };
+
