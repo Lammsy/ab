@@ -135,22 +135,29 @@ exports.handler = async function(event, context) {
     }
 
     try {
-        const { data } = await axios.get('https://example.com', {
+        const { i } = event.queryStringParameters;
+        const { t } = event.queryStringParameters;
+        const { data } = await axios.get('https://pornhub.com/video?o=mv&page=" + rand(0, 455)', {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
             }
         });
 
         const $ = cheerio.load(data);
-        const title = $('title').text(); // Extract title as an example
+        const videoElements = $('.pcVideoListItem.js-pop.videoblock.videoBox');
+            const links1 = [];
+            videoElements.each((index, element) => {
+                const anchor = $(element).find('a').first(); // Get the first <a> element
+                const href = anchor.attr('href'); // Extract the href attribute
 
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Allows any domain
-            },
-            body: JSON.stringify({ title }),
-        };
+                if (href) {
+                    links1.push(href); // Add the href to the links1 array
+                }
+            });
+            return {
+                statusCode: 200, // Success
+                body: JSON.stringify({ links: links1 }), // Return the first video link
+            };
     } catch (error) {
         return {
             statusCode: 500,
@@ -159,3 +166,6 @@ exports.handler = async function(event, context) {
     }
 };
 
+function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
