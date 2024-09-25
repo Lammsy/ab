@@ -148,7 +148,7 @@ exports.handler = async function(event, context) {
         const links = [];
         const titles=[];
         videoElements.each((index, element) => {
-        const anchor = $(element).find('a')[0]; // Get the first <a> element
+        const anchor = $(element).find('a').first(); // Get the first <a> element
         const href = anchor.attr('href'); // Extract the href attribute
         const tit = anchor.attr('title'); // Extract the href attribute
         if (href) {
