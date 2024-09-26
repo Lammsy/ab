@@ -154,7 +154,7 @@ exports.handler = async function(event, context) {
         const img = $(element).find('img').first().attr('src');
         const href = anchor.attr('href'); // Extract the href attribute
         const tit = anchor.attr('title'); // Extract the href attribute
-        const thvid = anchor.attr('video').first().attr('src'); // Extract the href attribute
+        const thvid = $(element).find('video').first().attr('src'); // Extract the href attribute
         if (href) {
             links.push(href); // Add the href to the links1 array
         }
