@@ -151,10 +151,11 @@ exports.handler = async function(event, context) {
         const thvids = [];
         videoElements.each((index, element) => {
         const anchor = $(element).find('a').first(); // Get the first <a> element
-        const img = $(element).find('img').first().attr('src');
+        const imgElement =$(element).find('img').first();
+        const img = imgElement.attr('src');
         const href = anchor.attr('href'); // Extract the href attribute
         const tit = anchor.attr('title'); // Extract the href attribute
-        const thvid = $(element).find('video').first().attr('src'); // Extract the href attribute
+        const thvid = imgElement.attr('data-mediabook'); // Extract the href attribute
         if (href) {
             links.push(href); // Add the href to the links1 array
         }
