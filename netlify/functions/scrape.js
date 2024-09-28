@@ -146,9 +146,7 @@ exports.handler = async function(event, context) {
 
         // Assuming you know the iframe selector
         const iframeSrc = $('iframe').attr('src'); // Get the src attribute of the iframe
-        if (!iframeSrc) {
-            return res.status(404).json({ error: 'Iframe not found' });
-        }
+        
 
         // Fetch the HTML content of the iframe
         const iframeResponse = await axios.get(iframeSrc);
