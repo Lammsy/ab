@@ -142,17 +142,25 @@ exports.handler = async function(event, context) {
         
 
         // Fetch the HTML content of the page that contains the iframe
-        const { data } = await axios.get("https://es.pornhub.com/embed/66cf5d90a3a30", {
+        const { data } = await axios.get("https://pornhub.com/embed/66cf5d90a3a30", {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
             }
         });
 
         const $ = cheerio.load(data);
+        const el = $('#player');
+
+        const elm = el.children();
+/*
+        // Output the immediate child elements
+        elm.each((index, element) => {
+            if(element!="")
+        });
 
         // Remove elements that match the selector
-        //$(selector).remove();
-
+        $('.mgp_topBar').remove();
+*/
         // Get the modified HTML
         const modifiedHtml = $.html();
 
