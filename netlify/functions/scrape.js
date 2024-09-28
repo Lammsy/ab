@@ -151,7 +151,7 @@ exports.handler = async function(event, context) {
         const $ = cheerio.load(data);
 
         // Remove elements that match the selector
-        $(selector).remove();
+        //$(selector).remove();
 
         // Get the modified HTML
         const modifiedHtml = $.html();
