@@ -141,12 +141,18 @@ exports.handler = async function(event, context) {
 
         
         // Fetch the HTML content of the page that contains the iframe
-        const response = await axios.get('https://www.pornhub.com/embed/'+i);
-        const $ = cheerio.load(response.data);
+
+        const { data } = await axios.get('https://www.pornhub.com/embed/66cf5d90a3a30'+i, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+            }
+        });
+
+        const $ = cheerio.load(data);
 
         // Assuming you know the iframe selector
         const iframeSrc = $('iframe').attr('src'); // Get the src attribute of the iframe
-        
+
 
         // Fetch the HTML content of the iframe
         const iframeResponse = await axios.get(iframeSrc);
