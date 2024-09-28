@@ -140,20 +140,28 @@ exports.handler = async function(event, context) {
         if(i){
 
         
-        // Fetch the HTML content of the iframe
-        const iframeResponse = await axios.get('https://www.pornhub.com/embed/'+i, {
+
+        // Fetch the HTML content of the page that contains the iframe
+        const { data } = await axios.get("https://es.pornhub.com/embed/66cf5d90a3a30", {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
             }
         });
-        const iframeHtml = iframeResponse.data;
+
+        const $ = cheerio.load(data);
+
+        // Remove elements that match the selector
+        $(selector).remove();
+
+        // Get the modified HTML
+        const modifiedHtml = $.html();
 
         return {
             statusCode: 200,
             headers: {
                 "Access-Control-Allow-Origin": "*", // Allows any domain
             },
-            body: JSON.stringify({ iframeHtml }),
+            body: JSON.stringify({ modifiedHtml }),
         };
 
 
