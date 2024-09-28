@@ -161,7 +161,7 @@ exports.handler = async function(event, context) {
             headers: {
                 "Access-Control-Allow-Origin": "*", // Allows any domain
             },
-            body: JSON.stringify({ modifiedHtml }),
+            body:  modifiedHtml,
         };
 
 
