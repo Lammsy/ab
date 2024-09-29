@@ -162,13 +162,14 @@ exports.handler = async function(event, context) {
 
         const elm = el.children();
 /*
-        // Output the immediate child elements
         elm.each((index, element) => {
-            if(element!="")
-        });
+            if ($element.attr('id') !== 'mgp_videoWrapper') {
+                $element.remove();
+            }
+        });*/
 
         // Remove elements that match the selector
-        $('.mgp_topBar').remove();*/
+        //$('.mgp_topBar').remove();
 
         // Get the modified HTML
         const modifiedHtml = $.html();
@@ -179,7 +180,7 @@ exports.handler = async function(event, context) {
               'Access-Control-Allow-Origin': '*', // Or specify your domain
               'Content-Type': 'text/html',
             },
-            body: '<iframe  src=\"https://www.pornhub.com/embed/66cf5d90a3a30\" frameborder=\"0\" width=\"560\" height=\"315\" scrolling=\"no\" allowfullscreen></iframe>',
+            body: modifiedHtml,
           };
 
         } else{
