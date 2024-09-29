@@ -118,6 +118,16 @@ async function getDoc(urls) {
     }
 }
 */
+
+
+
+
+
+
+
+
+
+/* SWosdiajsodiamsodaisjmd
 const axios = require('axios');
 const cheerio = require('cheerio');
 
@@ -159,8 +169,8 @@ exports.handler = async function(event, context) {
         });
 
         // Remove elements that match the selector
-        $('.mgp_topBar').remove();
-*/
+        $('.mgp_topBar').remove();*
+
         // Get the modified HTML
         const modifiedHtml = $.html();
     //modifiedHtml
@@ -169,7 +179,7 @@ exports.handler = async function(event, context) {
             headers: {
                 "Access-Control-Allow-Origin": "*", // Allows any domain
             },
-            body:  "<iframe src=\"https://www.pornhub.com/embed/66cf5d90a3a30\" frameborder=\"0\" width=\"560\" height=\"315\" scrolling=\"no\" allowfullscreen></iframe>",
+            body:  "<iframe  src=\"https://www.pornhub.com/embed/66cf5d90a3a30\" frameborder=\"0\" width=\"560\" height=\"315\" scrolling=\"no\" allowfullscreen></iframe>",
         };
 
 
@@ -228,4 +238,27 @@ exports.handler = async function(event, context) {
 
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+}*/
+
+const puppeteer = require('puppeteer');
+
+exports.handler = async (event, context) => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto('https://pornhub.com/embed/66cf5d90a3a30');
+
+  // Remove the part you don't want
+  await page.evaluate(() => {
+    const element = document.querySelector('.element-to-remove');
+    if (element) element.remove();
+  });
+
+  const modifiedHTML = await page.content();
+  await browser.close();
+
+  return {
+    statusCode: 200,
+    headers: { 'Content-Type': 'text/html' },
+    body: modifiedHTML,
+  };
+};
