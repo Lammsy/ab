@@ -284,33 +284,28 @@ exports.handler = async (event, context) => {
   };
 };
 */
-
-
 const axios = require('axios');
 
 exports.handler = async function(event, context) {
-  // URL del recurso original (antes de convertirse en blob)
-  const targetUrl = 'https://pornhub.com/fa28bab1-290d-4bc7-8748-0cebffb191d7/'; // Cambia a la URL real
+  const targetUrl = 'https://pornhub.com/fa28bab1-290d-4bc7-8748-0cebffb191d7'; // Cambia a la URL real
 
   try {
-    // Realizar la solicitud al archivo original
     const response = await axios.get(targetUrl, {
-      responseType: 'arraybuffer', // Obtener el archivo como un buffer binario
+      responseType: 'arraybuffer',
       headers: {
-        'Referer': 'https://www.pornhub.com/embed/66cf5d90a3a30/', // Cambia según sea necesario
+        'Referer': 'https://pornhub.com/embed/66cf5d90a3a30', // Cambia según sea necesario
         'Origin': 'https://pornhub.com/',   // Cambia según sea necesario
-        'User-Agent': 'Mozilla/5.0 ...'    // Usa un User-Agent similar al de tu navegador
+        'User-Agent': 'Mozilla/5.0 ...'    // Ajusta el User-Agent según sea necesario
       }
     });
 
-    // Convertir el contenido binario a base64
     const base64File = Buffer.from(response.data, 'binary').toString('base64');
 
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Permitir acceso CORS si es necesario
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify({
         success: true,
@@ -318,11 +313,15 @@ exports.handler = async function(event, context) {
       }),
     };
   } catch (error) {
+    // Registra el error detallado
+    console.error('Error al acceder al archivo:', error);
+
     return {
       statusCode: error.response ? error.response.status : 500,
       body: JSON.stringify({
         success: false,
-        message: error.message,
+        message: error.response ? error.response.data : 'Error en la solicitud',
+        statusText: error.response ? error.response.statusText : 'Error desconocido'
       }),
     };
   }
