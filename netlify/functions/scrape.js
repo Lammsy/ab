@@ -127,7 +127,6 @@ async function getDoc(urls) {
 
 
 
-/* SWosdiajsodiamsodaisjmd
 const axios = require('axios');
 const cheerio = require('cheerio');
 
@@ -169,7 +168,7 @@ exports.handler = async function(event, context) {
         });
 
         // Remove elements that match the selector
-        $('.mgp_topBar').remove();*
+        $('.mgp_topBar').remove();*/
 
         // Get the modified HTML
         const modifiedHtml = $.html();
@@ -177,11 +176,11 @@ exports.handler = async function(event, context) {
         return {
             statusCode: 200,
             headers: {
-                "Access-Control-Allow-Origin": "*", // Allows any domain
+              'Access-Control-Allow-Origin': '*', // Or specify your domain
+              'Content-Type': 'text/html',
             },
-            body:  "<iframe  src=\"https://www.pornhub.com/embed/66cf5d90a3a30\" frameborder=\"0\" width=\"560\" height=\"315\" scrolling=\"no\" allowfullscreen></iframe>",
-        };
-
+            body: '<iframe  src=\"https://www.pornhub.com/embed/66cf5d90a3a30\" frameborder=\"0\" width=\"560\" height=\"315\" scrolling=\"no\" allowfullscreen></iframe>',
+          };
 
         } else{
             
@@ -238,8 +237,8 @@ exports.handler = async function(event, context) {
 
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}*/
-
+}
+/*
 const puppeteer = require('puppeteer');
 
 exports.handler = async (event, context) => {
@@ -258,7 +257,11 @@ exports.handler = async (event, context) => {
 
   return {
     statusCode: 200,
-    headers: { 'Content-Type': 'text/html' },
+    headers: {
+      'Access-Control-Allow-Origin': '*', // Or specify your domain
+      'Content-Type': 'text/html',
+    },
     body: modifiedHTML,
   };
 };
+*/
