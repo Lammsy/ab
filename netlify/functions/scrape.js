@@ -122,7 +122,7 @@ async function getDoc(urls) {
 
 
 
-
+/*
 
 
 
@@ -197,7 +197,7 @@ exports.handler = async function(event, context) {
               'Content-Type': 'text/html',
             },
             body: modifiedHtml,
-          };*/
+          };
 
 
 
@@ -284,3 +284,46 @@ exports.handler = async (event, context) => {
   };
 };
 */
+
+
+const axios = require('axios');
+
+exports.handler = async function(event, context) {
+  // URL del recurso original (antes de convertirse en blob)
+  const targetUrl = 'https://pornhub.com/fa28bab1-290d-4bc7-8748-0cebffb191d7'; // Cambia a la URL real
+
+  try {
+    // Realizar la solicitud al archivo original
+    const response = await axios.get(targetUrl, {
+      responseType: 'arraybuffer', // Obtener el archivo como un buffer binario
+      headers: {
+        'Referer': 'https://pornhub.com', // Cambia según sea necesario
+        'Origin': 'https://pornhub.com',   // Cambia según sea necesario
+        'User-Agent': 'Mozilla/5.0 ...'    // Usa un User-Agent similar al de tu navegador
+      }
+    });
+
+    // Convertir el contenido binario a base64
+    const base64File = Buffer.from(response.data, 'binary').toString('base64');
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // Permitir acceso CORS si es necesario
+      },
+      body: JSON.stringify({
+        success: true,
+        data: `data:${response.headers['content-type']};base64,${base64File}`
+      }),
+    };
+  } catch (error) {
+    return {
+      statusCode: error.response ? error.response.status : 500,
+      body: JSON.stringify({
+        success: false,
+        message: error.message,
+      }),
+    };
+  }
+};
