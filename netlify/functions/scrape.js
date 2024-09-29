@@ -146,28 +146,25 @@ exports.handler = async function(event, context) {
     try {
 
         
-        const { i } = event.queryStringParameters;
-        const { t } = event.queryStringParameters;
+        const { i, t } = event.queryStringParameters;
         if(i){
-
-
-            axios.get('https://pornhub.com/fa28bab1-290d-4bc7-8748-0cebffb191d7', {
+            // Realizar la solicitud HTTP con axios usando await
+            const response = await axios.get('https://site.com/fa28bab1-290d-4bc7-8748-0cebffb191d7', {
                 headers: {
-                  'Referer': 'https://www.pornhub.com/embed/66cf5d90a3a30',
-                  'Origin': 'https://pornhub.com',
-                  'User-Agent': 'Mozilla/5.0 ...' // Agregar el User-Agent del navegador si es necesario
+                    'Referer': 'https://www.site.com/embed/66cf5d90a3a30',
+                    'Origin': 'https://site.com',
+                    'User-Agent': 'Mozilla/5.0 ...' // Ajusta el User-Agent si es necesario
                 }
-              }).then(response => {
-                return {
-                    statusCode: 200,
-                    headers: {
-                      'Access-Control-Allow-Origin': '*', // Or specify your domain
-                    },
-                    body: "TRUEUEUEUEUUE",
-                  };
-              }).catch(error => {
-                console.error('Error al acceder al archivo:', error.message);
-              });
+            });
+
+            // Devolver la respuesta exitosa al cliente
+            return {
+                statusCode: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*', // O especifica el dominio permitido
+                },
+                body: JSON.stringify({ success: true, data: response.data }),
+            };
 /*
         // Fetch the HTML content of the page that contains the iframe
         const { data } = await axios.get("https://pornhub.com/embed/66cf5d90a3a30", {
