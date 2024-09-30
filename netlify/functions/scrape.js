@@ -341,7 +341,7 @@ async function fetchVideo() {
             console.error("No video source found.");
             return {
                 statusCode: 404,
-                body: "Video not found",
+                body: $.html(),
             };
         }
     } catch (error) {
