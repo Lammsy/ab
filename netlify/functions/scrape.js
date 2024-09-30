@@ -122,7 +122,7 @@ async function getDoc(urls) {
 
 
 
-/*
+
 
 
 
@@ -150,37 +150,31 @@ exports.handler = async function(event, context) {
         if(i){
 
         // Fetch the HTML content of the page that contains the iframe
-        const { data } = await axios.get("https://pornhub.com/embed/66cf5d90a3a30", {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
-            }
-        });
+            const { data } = await axios.get('https://pornhub.com/view_video.php?viewkey=66cf5d90a3a30' + rand(0, 455), {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+                }
+            });
 
         const $ = cheerio.load(data);
-        const el = $('#player');
+        const el = $('script');
 
-        const elm = el.children();
+        //const elm = el.children();
 
-        elm.each((index, element) => {
-            if ($element.attr('id') !== 'mgp_videoWrapper') {
-                $element.remove();
-            }
-        });
 
         // Remove elements that match the selector
         //$('.mgp_topBar').remove();
 
         // Get the modified HTML
-        const modifiedHtml = $.html();
+        //const modifiedHtml = $.html();
     //modifiedHtml
-        return {
-            statusCode: 200,
-            headers: {
-              'Access-Control-Allow-Origin': '*', // Or specify your domain
-              'Content-Type': 'text/html',
-            },
-            body: modifiedHtml,
-          };
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Allows any domain
+                },
+                body: JSON.stringify({ el}),
+            };
 
 
 
@@ -292,7 +286,7 @@ const puppeteer = require('puppeteer');
 })();
 
 */
-
+/*
 
 
 const axios = require('axios');
@@ -328,7 +322,7 @@ async function fetchVideo() {
                     Your browser does not support the video tag.
                 </video>
             `;
-*/
+
             return {
                 statusCode: 200,
                 headers: {
@@ -355,3 +349,4 @@ async function fetchVideo() {
 
 // Call the async function
 module.exports.handler = fetchVideo;
+*/
