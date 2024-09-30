@@ -354,6 +354,4 @@ async function fetchVideo() {
 }
 
 // Call the async function
-fetchVideo().then(response => {
-    console.log(response); // Handle response as needed
-});
+module.exports.handler = fetchVideo;
