@@ -148,24 +148,7 @@ exports.handler = async function(event, context) {
         
         const { i, t } = event.queryStringParameters;
         if(i){
-            // Realizar la solicitud HTTP con axios usando await
-            const response = await axios.get('https://pornhub.com/fa28bab1-290d-4bc7-8748-0cebffb191d7', {
-                headers: {
-                    'Referer': 'https://pornhub.com/embed/66cf5d90a3a30',
-                    'Origin': 'https://pornhub.com',
-                    'User-Agent': 'Mozilla/5.0 ...' // Ajusta el User-Agent si es necesario
-                }
-            });
 
-            // Devolver la respuesta exitosa al cliente
-            return {
-                statusCode: 200,
-                headers: {
-                    'Access-Control-Allow-Origin': '*', // O especifica el dominio permitido
-                },
-                body: JSON.stringify({ success: true, data: "HOLA" }),
-            };
-/*
         // Fetch the HTML content of the page that contains the iframe
         const { data } = await axios.get("https://pornhub.com/embed/66cf5d90a3a30", {
             headers: {
@@ -177,7 +160,7 @@ exports.handler = async function(event, context) {
         const el = $('#player');
 
         const elm = el.children();
-/*
+
         elm.each((index, element) => {
             if ($element.attr('id') !== 'mgp_videoWrapper') {
                 $element.remove();
@@ -283,46 +266,80 @@ exports.handler = async (event, context) => {
     body: modifiedHTML,
   };
 };
+*//*
+const puppeteer = require('puppeteer');
+
+(async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  await page.goto('https://example.com', { waitUntil: 'networkidle0' });
+
+  // Accede al iframe por su selector
+  const frame = await page.frames().find(f => f.url().includes('iframe-url.com'));
+  
+  // Extraer el blob URL del contexto del iframe
+  const blobUrl = await frame.evaluate(() => {
+    const videoElement = document.querySelector('video');
+    return videoElement ? videoElement.src : null;
+  });
+
+  if (blobUrl) {
+    console.log('Blob URL encontrado en el iframe:', blobUrl);
+  }
+
+  await browser.close();
+})();
+
 */
+
+
+
+
 const axios = require('axios');
+const cheerio = require('cheerio');
 
-exports.handler = async function(event, context) {
-  const targetUrl = 'https://pornhub.com/fa28bab1-290d-4bc7-8748-0cebffb191d7'; // Cambia a la URL real
+// Fetch the HTML content of the page that contains the iframe
+const { data } = await axios.get("https://pornhub.com/embed/66cf5d90a3a30", { 
+    headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+    }
+});
 
-  try {
-    const response = await axios.get(targetUrl, {
-      responseType: 'arraybuffer',
-      headers: {
-        'Referer': 'https://pornhub.com/embed/66cf5d90a3a30', // Cambia según sea necesario
-        'Origin': 'https://pornhub.com/',   // Cambia según sea necesario
-        'User-Agent': 'Mozilla/5.0 ...'    // Ajusta el User-Agent según sea necesario
-      }
+const $ = cheerio.load(data);
+const el = $('#mgp_videoWrapper');
+const videoBlobUrl = el.find('source').attr('src'); // Modify selector as needed
+
+if (videoBlobUrl) {
+    // Fetch the video data
+    const videoResponse = await axios.get(videoBlobUrl, {
+        responseType: 'arraybuffer', // Important for binary data
     });
 
-    const base64File = Buffer.from(response.data, 'binary').toString('base64');
+    // Create a buffer and convert it to a blob URL
+    const videoBlob = Buffer.from(videoResponse.data);
+    const blobUrl = URL.createObjectURL(new Blob([videoBlob]));
+
+    // Create an HTML response with the video
+    const modifiedHtml = `
+        <video controls>
+            <source src="${blobUrl}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    `;
 
     return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify({
-        success: true,
-        data: `data:${response.headers['content-type']};base64,${base64File}`
-      }),
+        statusCode: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*', // Or specify your domain
+            'Content-Type': 'text/html',
+        },
+        body: modifiedHtml,
     };
-  } catch (error) {
-    // Registra el error detallado
-    console.error('Error al acceder al archivo:', error);
-
+} else {
+    console.error("No video source found.");
     return {
-      statusCode: error.response ? error.response.status : 500,
-      body: JSON.stringify({
-        success: false,
-        message: error.response ? error.response.data : 'Error en la solicitud',
-        statusText: error.response ? error.response.statusText : 'Error desconocido'
-      }),
+        statusCode: 404,
+        body: "Video not found",
     };
-  }
-};
+}
