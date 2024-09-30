@@ -311,7 +311,7 @@ async function fetchVideo() {
         const el = $('#mgp_videoElement');
         const videoBlobUrl = el.attr('src'); // Modify selector as needed
 
-        if (videoBlobUrl) {
+        if (videoBlobUrl) {/*
             // Fetch the video data
             const videoResponse = await axios.get(videoBlobUrl, {
                 responseType: 'arraybuffer', // Important for binary data
@@ -328,14 +328,14 @@ async function fetchVideo() {
                     Your browser does not support the video tag.
                 </video>
             `;
-
+*/
             return {
                 statusCode: 200,
                 headers: {
                     'Access-Control-Allow-Origin': '*', // Or specify your domain
                     'Content-Type': 'text/html',
                 },
-                body: modifiedHtml,
+                body: videoBlobUrl,
             };
         } else {
             console.error("No video source found.");
