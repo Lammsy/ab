@@ -309,7 +309,7 @@ async function fetchVideo() {
 
         const $ = cheerio.load(data);
         const el = $('#mgp_videoElement');
-        const videoBlobUrl = el.find('source').attr('src'); // Modify selector as needed
+        const videoBlobUrl = el.attr('src'); // Modify selector as needed
 
         if (videoBlobUrl) {
             // Fetch the video data
