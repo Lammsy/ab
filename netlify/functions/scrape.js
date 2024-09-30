@@ -295,51 +295,65 @@ const puppeteer = require('puppeteer');
 
 
 
-
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-// Fetch the HTML content of the page that contains the iframe
-const { data } = await axios.get("https://pornhub.com/embed/66cf5d90a3a30", { 
-    headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+async function fetchVideo() {
+    try {
+        // Fetch the HTML content of the page that contains the iframe
+        const { data } = await axios.get("https://pornhub.com/embed/66cf5d90a3a30", { 
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+            }
+        });
+
+        const $ = cheerio.load(data);
+        const el = $('#mgp_videoElement');
+        const videoBlobUrl = el.find('source').attr('src'); // Modify selector as needed
+
+        if (videoBlobUrl) {
+            // Fetch the video data
+            const videoResponse = await axios.get(videoBlobUrl, {
+                responseType: 'arraybuffer', // Important for binary data
+            });
+
+            // Create a buffer and convert it to a blob URL
+            const videoBlob = Buffer.from(videoResponse.data);
+            const blobUrl = URL.createObjectURL(new Blob([videoBlob]));
+
+            // Create an HTML response with the video
+            const modifiedHtml = `
+                <video controls>
+                    <source src="${blobUrl}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            `;
+
+            return {
+                statusCode: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*', // Or specify your domain
+                    'Content-Type': 'text/html',
+                },
+                body: modifiedHtml,
+            };
+        } else {
+            console.error("No video source found.");
+            return {
+                statusCode: 404,
+                body: "Video not found",
+            };
+        }
+    } catch (error) {
+        console.error("Error fetching video:", error);
+        return {
+            statusCode: 500,
+            body: "Internal Server Error",
+        };
     }
-});
-
-const $ = cheerio.load(data);
-const el = $('#mgp_videoWrapper');
-const videoBlobUrl = el.find('source').attr('src'); // Modify selector as needed
-
-if (videoBlobUrl) {
-    // Fetch the video data
-    const videoResponse = await axios.get(videoBlobUrl, {
-        responseType: 'arraybuffer', // Important for binary data
-    });
-
-    // Create a buffer and convert it to a blob URL
-    const videoBlob = Buffer.from(videoResponse.data);
-    const blobUrl = URL.createObjectURL(new Blob([videoBlob]));
-
-    // Create an HTML response with the video
-    const modifiedHtml = `
-        <video controls>
-            <source src="${blobUrl}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    `;
-
-    return {
-        statusCode: 200,
-        headers: {
-            'Access-Control-Allow-Origin': '*', // Or specify your domain
-            'Content-Type': 'text/html',
-        },
-        body: modifiedHtml,
-    };
-} else {
-    console.error("No video source found.");
-    return {
-        statusCode: 404,
-        body: "Video not found",
-    };
 }
+
+// Call the async function
+fetchVideo().then(response => {
+    console.log(response); // Handle response as needed
+});
