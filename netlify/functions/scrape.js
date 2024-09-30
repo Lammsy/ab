@@ -157,7 +157,7 @@ exports.handler = async function(event, context) {
             });
 
         const $ = cheerio.load(data);
-        const el = $('script').html;
+        const el = $('script')[0].html;
 
         //const elm = el.children();
 
