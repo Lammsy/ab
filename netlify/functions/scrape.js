@@ -158,24 +158,35 @@ exports.handler = async function(event, context) {
 
             const $ = cheerio.load(data);
 
-            // Get the HTML content of the first script tag
-            const sds = $('script').first().html(); 
-
-        //const elm = el.children();
-
-
-        // Remove elements that match the selector
-        //$('.mgp_topBar').remove();
-
-        // Get the modified HTML
-        //const modifiedHtml = $.html();
-    //modifiedHtml
+            // Select all <script> tags
+            const scripts = $('script');
+    
+            // Store the script contents in an array
+            let scriptContents = [];
+    
+            // Iterate through each script tag
+            scripts.each((index, element) => {
+                // Get the script content (inline script) or the src attribute (external script)
+                const scriptContent = $(element).html(); // For inline scripts
+                const scriptSrc = $(element).attr('src'); // For external scripts
+    
+                // Store the content in the array, with some identifier
+                if (scriptContent) {
+                    scriptContents.push(`Inline Script ${index + 1}:\n${scriptContent}`);
+                } else if (scriptSrc) {
+                    scriptContents.push(`External Script ${index + 1}:\nSource URL: ${scriptSrc}`);
+                }
+            });
+    
+            // Join all the script contents into a single string for the response
+            const scriptsJoined = scriptContents.join('\n\n');
+    
             return {
                 statusCode: 200,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Allows any domain
                 },
-                body:  sds,
+                body: scriptsJoined || "No script content found",
             };
 
 
