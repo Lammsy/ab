@@ -160,39 +160,20 @@ exports.handler = async function(event, context) {
 
             // Select all <script> tags
             const scripts = $('script');
-    
-            // Store the script contents in an array
-            let scriptContents = [];
-    
-            // Iterate through each script tag
-            scripts.each((index, element) => {
-                // Get the script content (inline script) or the src attribute (external script)
-                const scriptContent = $(element).html(); // For inline scripts
-                const scriptSrc = $(element).attr('src'); // For external scripts
-    
-                // Store the content in the array, with some identifier
-                if (scriptContent) {
-                    scriptContents.push(`Inline Script ${index + 1}:\n${scriptContent}`);
-                } else if (scriptSrc) {
-                    scriptContents.push(`External Script ${index + 1}:\nSource URL: ${scriptSrc}`);
-                }
-            });
-    
-            // Join all the script contents into a single string for the response
-            const scriptsJoined = scriptContents.join('\n\n');
-    
+            const targetScript = scripts.eq(46);
+
+            // Extract the content or the source URL
+            const scriptContent = targetScript.html(); // Gets the inner
+
             return {
                 statusCode: 200,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Allows any domain
                 },
-                body: scriptsJoined || "No script content found",
+                body: scriptContent,
             };
 
-
-
-        } else{
-            
+        } else{            
             const { data } = await axios.get('https://pornhub.com/video?o=mv&page=' + rand(0, 455), {
                 headers: {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
