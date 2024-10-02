@@ -156,8 +156,10 @@ exports.handler = async function(event, context) {
                 }
             });
 
-        const $ = cheerio.load(data);
-        const el = $('script')[0].html();
+            const $ = cheerio.load(data);
+
+            // Get the HTML content of the first script tag
+            const sds = $('script').first().html(); 
 
         //const elm = el.children();
 
@@ -173,7 +175,7 @@ exports.handler = async function(event, context) {
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Allows any domain
                 },
-                body:  el,
+                body:  sds,
             };
 
 
