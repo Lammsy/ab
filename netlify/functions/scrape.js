@@ -167,7 +167,7 @@ exports.handler = async function(event, context) {
             
             //GET RECOMMENDATIONS
 
-            const videoElements = $('.fade, .fadeUp, .videoPreviewBg, .linkVideoThumb, .js-linkVideoThumb, .img');
+            const videoElements = $('.fade.fadeUp.videoPreviewBg.linkVideoThumb.js-linkVideoThumb.img');
             const links = [];
             const titles=[];
             const images =[];
@@ -192,23 +192,12 @@ exports.handler = async function(event, context) {
                 thvids.push(thvid);
             }
             });
-            
             return {
                 statusCode: 200,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Allows any domain
                 },
-                body: JSON.stringify({ links , titles , images,thvids}),
-            };
-
-
-
-            return {
-                statusCode: 200,
-                headers: {
-                    "Access-Control-Allow-Origin": "*", // Allows any domain
-                },
-                body: JSON.stringify({ scriptContent,}),
+                body: JSON.stringify({ scriptContent,links , titles , images,thvids}),
             };
 
         } else{            
