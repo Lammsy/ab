@@ -167,7 +167,7 @@ exports.handler = async function(event, context) {
             
             //GET RECOMMENDATIONS
 
-            const videoElements = $('.fade.fadeUp.videoPreviewBg.linkVideoThumb.js-linkVideoThumb.img');
+            const videoElements = $('.pcVideoListItem.js-pop.videoblock.videoBox.alpha');
             const links = [];
             const titles=[];
             const images =[];
