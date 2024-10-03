@@ -156,81 +156,78 @@ exports.handler = async function(event, context) {
                 }
             });
 
-            const $ = cheerio.load(data);
+        // Use Cheerio to parse the HTML content
+        const $ = cheerio.load(data);
 
-            // Select all <script> tags
-            const scripts = $('script');
-            const targetScript = scripts.eq(46);
+        // Extract all <script> tags and get the content of the 47th one (index 46)
+        const scripts = $('script');
+        const targetScript = scripts.eq(46);
+        const scriptContent = targetScript.html(); // Gets the inner HTML content of the script
 
-            // Extract the content or the source URL
-            const scriptContent = targetScript.html(); // Gets the inner
-            
-            //GET RECOMMENDATIONS
+        // Scrape recommendations from the first page
+        const videoElements1 = $('.thumbnail-info-wrapper.clearfix');
+        const links = [];
+        const titles = [];
+        const images = [];
+        const thvids = [];
 
-            const videoElements = $('.thumbnail-info-wrapper.clearfix');
-            const links = [];
-            const titles=[];
-            const images =[];
-            const thvids = [];
-            videoElements.each((index, element) => {
-            const anchor = $(element).find('a').first(); // Get the first <a> element
-            const href = anchor.attr('href'); // Extract the href attribute
-            const tit = anchor.attr('title'); // Extract the href attribute
+        videoElements1.each((index, element) => {
+            const anchor = $(element).find('a').first();
+            const href = anchor.attr('href');
+            const tit = anchor.attr('title');
 
-            const imgElement =$(element).find('img').first();
+            const imgElement = $(element).find('img').first();
             const img = imgElement.attr('src');
-            const thvid = imgElement.attr('data-mediabook'); // Extract the href attribute
-            if (href) {
-                links.push(href); // Add the href to the links1 array
+            const thvid = imgElement.attr('data-mediabook');
+
+            if (href) links.push(href);
+            if (tit) titles.push(tit);
+            if (img) images.push(img);
+            if (thvid) thvids.push(thvid);
+        });
+
+        // Load the second page with dynamic URL based on random page number
+        const { data: data2 } = await axios.get('https://pornhub.com/video?o=mv&page=' + rand(0, 455), {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
             }
-            if(tit){
-                titles.push(tit);
-            }
-            if(img){
-                images.push(img);
-            }
-            if(thvid){
-                thvids.push(thvid);
-            }
-            });
-            
-            const { data: data2 } = await axios.get('https://pornhub.com/video?o=mv&page=' + rand(0, 455), {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
-                }
-            });
-    
-            const $2 = cheerio.load(data);
-            const videoElements2 = $2('.pcVideoListItem.js-pop.videoblock.videoBox');
-            videoElements2.each((index, element) => {
-            const anchor = $(element).find('a').first(); // Get the first <a> element
-            const imgElement =$(element).find('img').first();
+        });
+
+        // Use a different cheerio instance to parse the second page
+        const $2 = cheerio.load(data2);
+
+        // Scrape video elements from the second page
+        const videoElements2 = $2('.pcVideoListItem.js-pop.videoblock.videoBox');
+        videoElements2.each((index, element) => {
+            const anchor = $2(element).find('a').first();
+            const imgElement = $2(element).find('img').first();
             const img = imgElement.attr('src');
-            const href = anchor.attr('href'); // Extract the href attribute
-            const tit = anchor.attr('title'); // Extract the href attribute
-            const thvid = imgElement.attr('data-mediabook'); // Extract the href attribute
-            if (href) {
-                links.push(href); // Add the href to the links1 array
-            }
-            if(tit){
-                titles.push(tit);
-            }
-            if(img){
-                images.push(img);
-            }
-            if(thvid){
-                thvids.push(thvid);
-            }
-            });
+            const href = anchor.attr('href');
+            const tit = anchor.attr('title');
+            const thvid = imgElement.attr('data-mediabook');
 
+            if (href) links.push(href);
+            if (tit) titles.push(tit);
+            if (img) images.push(img);
+            if (thvid) thvids.push(thvid);
+        });
 
-            return {
-                statusCode: 200,
-                headers: {
-                    "Access-Control-Allow-Origin": "*", // Allows any domain
-                },
-                body: JSON.stringify({videoElementsLength: videoElements.length,links , titles , images,thvids}),
-            };
+        // Return the consolidated results
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Allows any domain
+            },
+            body: JSON.stringify({
+                videoElements1Length: videoElements1.length, // Length of elements from the first page
+                videoElements2Length: videoElements2.length, // Length of elements from the second page
+                links,
+                titles,
+                images,
+                thvids,
+                scriptContent, // Optional: Include script content if needed
+            }),
+        };
 
         } else{            
             const { data } = await axios.get('https://pornhub.com/video?o=mv&page=' + rand(0, 455), {
