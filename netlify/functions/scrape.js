@@ -164,13 +164,51 @@ exports.handler = async function(event, context) {
 
             // Extract the content or the source URL
             const scriptContent = targetScript.html(); // Gets the inner
+            
+            //GET RECOMMENDATIONS
+
+            const videoElements = $('.fade, .fadeUp, .videoPreviewBg, .linkVideoThumb, .js-linkVideoThumb, .img');
+            const links = [];
+            const titles=[];
+            const images =[];
+            const thvids = [];
+            videoElements.each((index, element) => {
+            const anchor = $(element).find('a').first(); // Get the first <a> element
+            const imgElement =$(element).find('img').first();
+            const img = imgElement.attr('src');
+            const href = anchor.attr('href'); // Extract the href attribute
+            const tit = anchor.attr('title'); // Extract the href attribute
+            const thvid = imgElement.attr('data-mediabook'); // Extract the href attribute
+            if (href) {
+                links.push(href); // Add the href to the links1 array
+            }
+            if(tit){
+                titles.push(tit);
+            }
+            if(img){
+                images.push(img);
+            }
+            if(thvid){
+                thvids.push(thvid);
+            }
+            });
+            
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Allows any domain
+                },
+                body: JSON.stringify({ links , titles , images,thvids}),
+            };
+
+
 
             return {
                 statusCode: 200,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Allows any domain
                 },
-                body: scriptContent,
+                body: JSON.stringify({ scriptContent,}),
             };
 
         } else{            
