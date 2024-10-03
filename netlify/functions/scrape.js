@@ -167,7 +167,7 @@ exports.handler = async function(event, context) {
             
             //GET RECOMMENDATIONS
 
-            const videoElements = $('.thumbnail-info-wrapper.clearfix');
+            const videoElements = $('.thumbnail-info-wrapper');
             const links = [];
             const titles=[];
             const images =[];
