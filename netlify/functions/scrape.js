@@ -167,7 +167,7 @@ exports.handler = async function(event, context) {
             
             //GET RECOMMENDATIONS
 
-            const videoElements = $('.thumbnail-info-wrapper');
+            const videoElements = $('.thumbnail-info-wrapper.clearfix');
             const links = [];
             const titles=[];
             const images =[];
@@ -193,6 +193,37 @@ exports.handler = async function(event, context) {
                 thvids.push(thvid);
             }
             });
+            
+            const { data: data2 } = await axios.get('https://pornhub.com/video?o=mv&page=' + rand(0, 455), {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+                }
+            });
+    
+            const $2 = cheerio.load(data);
+            const videoElements2 = $2('.pcVideoListItem.js-pop.videoblock.videoBox');
+            videoElements2.each((index, element) => {
+            const anchor = $(element).find('a').first(); // Get the first <a> element
+            const imgElement =$(element).find('img').first();
+            const img = imgElement.attr('src');
+            const href = anchor.attr('href'); // Extract the href attribute
+            const tit = anchor.attr('title'); // Extract the href attribute
+            const thvid = imgElement.attr('data-mediabook'); // Extract the href attribute
+            if (href) {
+                links.push(href); // Add the href to the links1 array
+            }
+            if(tit){
+                titles.push(tit);
+            }
+            if(img){
+                images.push(img);
+            }
+            if(thvid){
+                thvids.push(thvid);
+            }
+            });
+
+
             return {
                 statusCode: 200,
                 headers: {
