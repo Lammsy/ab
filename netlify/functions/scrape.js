@@ -213,6 +213,7 @@ exports.handler = async function(event, context) {
         });
         const qualities=scriptContent.split('"quality":"');
         const vidlinks = scriptContent.split('"videoUrl":"https:\/\/cv-h.phncdn.com');
+        const tabline="--------------";
         //qualities.splice(index, 1);//remove index, number of el from index
         // Return the consolidated results
         return {
@@ -228,6 +229,7 @@ exports.handler = async function(event, context) {
                 images,
                 thvids,
                 scriptContent, // Optional: Include script content if needed
+                tabline,
                 vidlinks
             }),
         };
