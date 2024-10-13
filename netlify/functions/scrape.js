@@ -214,6 +214,7 @@ exports.handler = async function(event, context) {
         const qualities=scriptContent.split('"quality":"');
         const vidlinks = scriptContent.split('"videoUrl":"https:\/\/cv-h.phncdn.com');
         const tabline="--------------";
+        vidlinks = vidlinks.splice(index, 1);
         //qualities.splice(index, 1);//remove index, number of el from index
         // Return the consolidated results
         return {
