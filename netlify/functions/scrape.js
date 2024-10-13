@@ -211,7 +211,9 @@ exports.handler = async function(event, context) {
             if (img) images.push(img);
             if (thvid) thvids.push(thvid);
         });
-
+        const qualities=scriptContent.split('"quality":"');
+        const vidlinks = scriptContent.split('"videoUrl":"https:\/\/cv-h.phncdn.com');
+        //qualities.splice(index, 1);//remove index, number of el from index
         // Return the consolidated results
         return {
             statusCode: 200,
@@ -226,6 +228,7 @@ exports.handler = async function(event, context) {
                 images,
                 thvids,
                 scriptContent, // Optional: Include script content if needed
+                vidlinks
             }),
         };
 
