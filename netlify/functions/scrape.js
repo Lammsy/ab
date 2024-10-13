@@ -212,7 +212,7 @@ exports.handler = async function(event, context) {
             if (thvid) thvids.push(thvid);
         });
         const qualities=scriptContent.split('"quality":"');
-        const vidlinks = scriptContent.split('"videoUrl":"https:\/\/cv-h.phncdn.com').first();
+        const vidlinks = scriptContent.split('"videoUrl":"https:\/\/cv-h.phncdn.com').first;
         const tabline="--------------";
         //qualities.splice(index, 1);//remove index, number of el from index
         // Return the consolidated results
