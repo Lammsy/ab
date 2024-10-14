@@ -217,10 +217,10 @@ exports.handler = async function(event, context) {
         const qualities = scriptContent.split('"quality":"');
 
         // Split script content to extract video URLs and get the first one
-        const vidlinks = scriptContent.split('"videoUrl":"https://cv-h.phncdn.com');
+        const vidlinks = scriptContent.split('"videoUrl\":\"https:\\/\\/cv-h.phncdn.com\\');
         
         // Ensure vidlinks array is not empty before accessing first element
-        const firstVidlink = vidlinks.length > 1 ? `https://cv-h.phncdn.com${vidlinks[1].split('"')[1]}` : null;
+        const firstVidlink = vidlinks.length > 1 ? `"videoUrl\":\"https:\\/\\/cv-h.phncdn.com\\${vidlinks[1].split('"')[1]}` : null;
         const tabline="--------------";
         //qualities.splice(index, 1);//remove index, number of el from index
         // Return the consolidated results
